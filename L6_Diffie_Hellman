@@ -1,0 +1,81 @@
+# Public parameters
+q = 23
+alpha = 5 
+
+# Private keys
+XA = 6
+XB = 15
+
+# Public keys
+YA = pow(alpha, XA, q)
+YB = pow(alpha, XB, q)
+
+print("Public Parameters:")
+print("q =", q)
+print("alpha =", alpha)
+
+print("\nPublic Keys:")
+print("Alice's Public Key (YA) =", YA)
+print("Bob's Public Key (YB) =", YB)
+
+# Shared secret computation
+KA = pow(YB, XA, q)
+KB = pow(YA, XB, q)
+
+print("\nShared Secret Keys:")
+print("Alice's Shared Key (KA) =", KA)
+print("Bob's Shared Key (KB) =", KB)
+
+if KA == KB:
+    print("\nKey Exchange Successful: KA = KB")
+else:
+    print("\nKey Exchange Failed")
+
+
+# Man-in-the-Middle Attack on Diffie-Hellman
+
+# Public parameters
+q = 23
+alpha = 5
+
+# Alice's private key
+XA = 6
+YA = pow(alpha, XA, q)
+
+# Bob's private key
+XB = 15
+YB = pow(alpha, XB, q)
+
+# Darth (Attacker) private keys
+XD1 = 13   # for Alice
+XD2 = 7    # for Bob
+
+YD1 = pow(alpha, XD1, q)
+YD2 = pow(alpha, XD2, q)
+
+print("\n=== Man-in-the-Middle Attack ===\n")
+
+print("Alice sends YA to Darth instead of Bob")
+print("Bob sends YB to Darth instead of Alice\n")
+
+# Alice thinks YD2 is Bob's public key
+KA = pow(YD2, XA, q)
+
+# Bob thinks YD1 is Alice's public key
+KB = pow(YD1, XB, q)
+
+# Darth computes both shared keys
+KD_with_Alice = pow(YA, XD2, q)
+KD_with_Bob = pow(YB, XD1, q)
+
+print("Shared Keys:")
+print("Alice's Key (with Darth):", KA)
+print("Bob's Key (with Darth):", KB)
+
+print("\nDarth's Keys:")
+print("Darth-Alice Key:", KD_with_Alice)
+print("Darth-Bob Key:", KD_with_Bob)
+
+print("\nConclusion:")
+print("Alice and Bob do NOT share the same key")
+print("Attacker successfully intercepts communication")
